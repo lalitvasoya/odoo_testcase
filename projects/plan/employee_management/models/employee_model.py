@@ -41,7 +41,7 @@ class EmployeeUser(models.Model):
             record.leave = 30 - (record.salary * 30) / 15000
 
     @api.onchange("name")
-    def _onchange_name(self):
+    def onchange_name(self):
         if self.name:
             self.summary = self.name + " is Tntra employee."
 

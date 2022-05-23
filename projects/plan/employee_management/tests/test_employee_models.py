@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from odoo.tests import common, tagged
+from odoo.tests import common, tagged, Form
 
 
 class TestEmployeeUserModel(common.TransactionCase):
@@ -11,9 +11,12 @@ class TestEmployeeUserModel(common.TransactionCase):
             "doj": datetime.now(),
             "leave": 2,
             "height": 5.8,
-            "salary": 15000,
             "summary": "python developer."
         }
-        record = self.env['employee.user'].create(initial_value)
-        record._onchange_name()
-        breakpoint()
+        form = Form(self.env['employee.user'])
+        for field, value in initial_value.items():
+            setattr(form, field, value)
+        record = form.save()
+        self.assertEqual(record.salary, 14000)
+        self.assertEqual(record.leave, 2)
+
