@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <data>
+        <!-- todo action -->
+        <record id="todo_model_action" model="ir.actions.act_window">
+            <field name="name"> Todo Action </field>
+            <field name="res_model">todo</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- todo tree view for listing the todo records -->
+        <record id="todo_model_tree_view" model="ir.ui.view">
+            <field name="name">todo.tree.view</field>
+            <field name="model">todo</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="task"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- todo form view for create update the todo -->
+        <record id="todo_model_form_view" model="ir.ui.view">
+            <field name="name">todo.form.view</field>
+            <field name="model">todo</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="task"/>
+                        </group>
+                        <group string="Contact">
+                            <field name="status"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <menuitem id="plan_management_main_menu" name="TODO"/>
+        <menuitem id="todo_menu" parent="plan_management_main_menu" name="TODO Management" action="todo_model_action"/>
+    </data>
+</odoo>

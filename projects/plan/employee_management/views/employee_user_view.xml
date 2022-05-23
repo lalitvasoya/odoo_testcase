@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Employee user model action item -->
+        <record id="employee_user_model_action" model="ir.actions.act_window">
+            <field name="name">Employee User Model</field>
+            <field name="res_model">employee.user</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="context">{"search_default_group_by_on_company": 1}</field>
+        </record>
+
+        <!-- Employee user model tree view -->
+        <record id="employee_user_model_tree_view" model="ir.ui.view">
+            <field name="name">employee.user.tree.view</field>
+            <field name="model">employee.user</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="doj"/>
+                    <field name="leave"/>
+                    <field name="height"/>
+                    <field name="active" invisible="1"/>
+                    <field name="state"/>
+                   </tree>
+            </field>
+        </record>
+
+        <!-- Employee user model search view -->
+        <record id="employee_user_model_search_view" model="ir.ui.view">
+            <field name="name">employee.user.search.view</field>
+            <field name="model">employee.user</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="email"/>
+                    <field name="summary"/>
+                    <filter name="check_new" string="New" domain="[('state', '=', 'draft')]"/>
+                    <filter name="check_approved" string="Approved" domain="[('state', '=', 'pending_approval')]"/>
+                    <filter name="check_employee" string="Employee" domain="[('state', '=', 'employee')]"/>
+                    <filter name="check_left" string="Leave" domain="[('state', '=', 'not_a_employee')]"/>
+                    <filter name="check_archived" string="Archive" domain="[('active','=', False)]"/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_by_on_company" string="Group Company" context="{'group_by': 'company_id'}" />
+                        <!-- <filter name="group_by_on_hobbies" string="Hobbies" context=""-->
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Employee user model form view -->
+        <record id="employee_user_model_form_view" model="ir.ui.view">
+            <field name="name">employee.user.form.view</field>
+            <field name="model">employee.user</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <header>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,pending_approval,employee"/>
+                            <button name="send_for_approval" string="Send for an approval" type="object" states="draft" class="oe_highlights"/>
+                            <button name="make_employee" string="Approve" type="object" states="pending_approval" class="oe_highlights" />
+                            <button name="leaving_company" string="Leave Company" type="object" states="employee" class="oe_highlights"/>
+                            <button name="reset" string="Reset" type="object" states="pending_approval,employee,not_a_employee" class="oe_highlights" />
+                        </header>
+                        <group string="Personal Details">
+                            <group>
+                                <field name="name" required="1" />
+                                <field name="email" required="1" widget="email" />
+                            </group>
+                            <group>
+                                <field name="height"/>
+                                <field name="active" invisible="1"/>
+                                <field name="doj"/>
+                                <field name="leave"/>
+                                <field name="salary"/>
+                                <field name="company_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="company_is_active"/>
+                                <field name="hobbies_ids" widget="many2many_tags" />
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page name="summary" string="Summary">
+                                <separator string="Employee-Summany"/>
+                                <field name="summary"/>
+                            </page>
+                            <page name="document" string="Document">
+                                <group>
+                                    <field name="document_ids">
+                                        <tree>
+                                            <field name="sequence" widget="handle"/>
+                                            <field name="name"/>
+                                            <field name="file"/>
+                                        </tree>
+                                        <form>
+                                            <group>
+                                                <field name="name"/>
+                                                <field name="file"/>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Employee company model menu -->
+        <record id="employee_company_model_action" model="ir.actions.act_window">
+            <field name="name">Employee Company</field>
+            <field name="res_model">employee.company</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Employee company model tree view -->
+        <record id="employee_company_model_tree_view" model="ir.ui.view">
+            <field name="name">employee.company.tree.view</field>
+            <field name="model">employee.company</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Employee company model form view -->
+        <record id="employee_company_model_form_view" model="ir.ui.view">
+            <field name="name">employee.company.form.view</field>
+            <field name="model">employee.company</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="is_active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Employee user main menu -->
+        <menuitem id="employee_management_main_menu" name="Employee Management"/>
+        <menuitem id="employee_user_model_menu" parent="employee_management_main_menu" action="employee_user_model_action"/>
+
+        <!-- Employee company model user model menu -->
+        <menuitem id="employee_management_configuration_menu" parent="employee_management_main_menu" name="Configuration" sequence="100"/>
+        <menuitem id="employee_company_model_menu" parent="employee_management_configuration_menu"
+                  sequence="10" name="Company" action="employee_company_model_action"/>
+    </data>
+</odoo>

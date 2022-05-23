@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_user_model,access_employee_user_model,model_employee_user,,1,1,1,1
+access_employee_company_model,access_employee_company_model,model_employee_company,,1,1,1,1
+access_document_model,access_document_model,model_document,,1,1,1,1
+access_hobby_model, access_hobby_model,model_hobby,,1,1,1,1
